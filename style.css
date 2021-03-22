@@ -1,3 +1,12 @@
+@font-face {
+    font-family: roboto;
+    src: url(Roboto_Mono/RobotoMono-VariableFont_wght.ttf);
+}
+
+body {
+    font-family: roboto;
+    font-size: 15px;
+}
 h1 {
     margin-left: 40%;
     font-size: 40px;
@@ -28,17 +37,13 @@ h1 {
 .hidden {
     display: none;
 }
-body {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 15px;
-}
 #filter {
     margin-bottom: 10px;
 }
 .log {
     margin-bottom: 5px;
     height: 40px;
-    padding-top: 10px;
+    padding-top: 15px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 20px;
@@ -46,6 +51,7 @@ body {
 }
 #delete {
     float: right;
+    height: 30px;
 }
 .checkmark {
     color: wheat;
@@ -58,4 +64,27 @@ body {
 .func {
     height: 25px;
     width: 30px;
+}
+.floating {   
+    animation-name: floating; 
+    animation-duration: 2s; 
+    animation-iteration-count: infinite; 
+    animation-timing-function: ease-in-out; 
+    margin-left: 30px; 
+    margin-top: 5px; 
+} 
+@keyframes floating { 
+    0% { transform: translate(0,  0px); } 
+    50%  { transform: translate(0, 5px); } 
+    100%   { transform: translate(0, -0px); }     
+} 
+input {
+    width: 300px;
+    height: 40px;
+    font-size: 18px;
+    padding-left: 10px;
+}
+button {
+    height: 40px;
+    width: 100px;
 }

@@ -3,31 +3,44 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
-    <title>My Daily Log</title>
+    <title>Daily Log</title>
 </head>
-    <h1>My Daily Log</h1>
+
+<body>
+    <!-- 
+        TODO ->
+            1. decide visual details (round corner for logs? other fonts?)
+            2. set up local storage to save user's plans(IMPORTANT)
+            3. add a 'generate random' button for food tab
+            4. combine time.html to show time and random greetings
+            5. set up different background/color schema for different time of a day
+            6. perhaps(if I'm happy with it...) add a 'download schedule as pdf' feature
+            7. implement 'topup' and other lists feature to the logs(so that users can rearrange them casually)
+            8. add a 'stop floating' slider(sometimes it just gets anoyying to the viewers)
+     -->
+    <h1>Daily Log</h1>
     <!-- tabs and forms for users to fill out -->
     <div id="left">
         <div id="tabs">
-            <div data-myform="#form_food" id="tab_food" class="tab active">Food</div>
-            <div data-myform="#form_exercise" id="tab_exercise" class="tab">Exercise</div>
-            <div data-myform="#form_mindfulness" id="tab_mindfulness" class="tab">Mindfulness</div>
+            <div data-myform="#form_exercise" id="tab_exercise" class="tab active">Mission</div>
+            <div data-myform="#form_food" id="tab_food" class="tab">Food</div>
+            <div data-myform="#form_mindfulness" id="tab_mindfulness" class="tab">Random</div>
         </div>
         <div id="forms">
-            <div id="form_food" class="form">
-                What did you eat? <br>
-                <input type="text" id="food_input" maxlength="30">
-                <button data-mycolor="rgb(44, 119, 168)" id="food_add">Add</button>
+            <div id="form_exercise" class="form">
+                <p>What's your plan for today? <br></p>
+                <input type="text" id="exercise_input" placeholder="lunch with abbie">
+                <button data-mycolor="#487695" id="exercise_add">Add</button>
             </div>
-            <div id="form_exercise" class="form hidden">
-                What did you do to move? <br>
-                <input type="text" id="exercise_input">
-                <button data-mycolor="rgb(81, 132, 166)" id="exercise_add">Add</button>
+            <div id="form_food" class="form hidden">
+                <p>What do you want to eat? <br></p>
+                <input type="text" id="food_input" placeholder="ramen">
+                <button data-mycolor="#6c91aa" id="food_add">Add</button>
             </div>
             <div id="form_mindfulness" class="form hidden">
-                How did you stay present? <br>
-                <input type="text" id="mindfulness_input">
-                <button data-mycolor="rgb(144, 162, 173)" id="mindfulness_add">Add</button>
+                <p>Anything else...? <br></p>
+                <input type="text" id="mindfulness_input" placeholder="sunset">
+                <button data-mycolor="#b5c8d4" id="mindfulness_add">Add</button>
             </div>
         </div>
     </div>
@@ -35,20 +48,20 @@
     <!-- filter and the actual task that were added to the list -->
     <div id="right">
         <!-- &check; -->
-        <div id="select">
+        <div id="select" onchange="logfilter()">
             Filter: 
             <select id="filter">
                 <option value="all">All</option>
+                <option value="exer">Mission</option>
                 <option value="food">Food</option>
-                <option value="exer">Exercise</option>
-                <option value="mind">Mindfulness</option>
+                <option value="mind">Random</option>
             </select>
             <button id="delete">Delete Entries</button>
         </div>
     </div>
 
     <script>
-        //get all buttons work
+        //get add buttons to work
         let allButtons = document.querySelectorAll('.form button')
         let right = document.querySelector('#right')
         let deleteAll = document.getElementById('delete')
@@ -65,6 +78,7 @@
                     //setting up temp style
                     temp.style.backgroundColor = event.currentTarget.dataset.mycolor
                     temp.classList.add('log')
+                    temp.classList.add('floating')
                     temp.setAttribute('data-logtype', event.currentTarget.id)
 
                     //delete button
@@ -106,6 +120,7 @@
                     }
 
                     right.appendChild(temp)
+                    document.querySelectorAll('input')[i].value = ''
                 }
             }
         }
@@ -136,10 +151,8 @@
 
         //get filter work
         let filter = document.getElementById('filter')
-        filter.onclick = function(event) {
-            //console.log(filter.value)
+        function logfilter() {
             let logs = right.children
-            //console.log(logs)
             if (filter.value == 'all') {
                 for (let i = 1; i < logs.length; i++) {
                     logs[i].classList.remove('hidden')
@@ -196,7 +209,6 @@
             }
         }
     </script>
-<body>
 
 
 </body>
