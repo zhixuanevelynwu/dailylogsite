@@ -1,0 +1,61 @@
+h1 {
+    margin-left: 40%;
+    font-size: 40px;
+    font-weight: 200;
+}
+#left {
+    float: left;
+    width: 60%;
+    box-sizing: border-box;
+}
+#right {
+    float: left;
+    width: 39%;
+    box-sizing: border-box;
+}
+.tab {
+    width: 33%;
+    float: left;
+    text-align: center;
+    height: 40px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+.active {
+    background-color: #ccc;
+}
+.hidden {
+    display: none;
+}
+body {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 15px;
+}
+#filter {
+    margin-bottom: 10px;
+}
+.log {
+    margin-bottom: 5px;
+    height: 40px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 20px;
+    color:white;
+}
+#delete {
+    float: right;
+}
+.checkmark {
+    color: wheat;
+    font-size: 30px;
+    margin-right: 20px;
+    margin-left: 10px;
+    margin-top: -10px;
+    float: left;
+}
+.func {
+    height: 25px;
+    width: 30px;
+}

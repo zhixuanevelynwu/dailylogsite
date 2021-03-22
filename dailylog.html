@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>My Daily Log</title>
+</head>
+    <h1>My Daily Log</h1>
+    <!-- tabs and forms for users to fill out -->
+    <div id="left">
+        <div id="tabs">
+            <div data-myform="#form_food" id="tab_food" class="tab active">Food</div>
+            <div data-myform="#form_exercise" id="tab_exercise" class="tab">Exercise</div>
+            <div data-myform="#form_mindfulness" id="tab_mindfulness" class="tab">Mindfulness</div>
+        </div>
+        <div id="forms">
+            <div id="form_food" class="form">
+                What did you eat? <br>
+                <input type="text" id="food_input" maxlength="30">
+                <button data-mycolor="rgb(44, 119, 168)" id="food_add">Add</button>
+            </div>
+            <div id="form_exercise" class="form hidden">
+                What did you do to move? <br>
+                <input type="text" id="exercise_input">
+                <button data-mycolor="rgb(81, 132, 166)" id="exercise_add">Add</button>
+            </div>
+            <div id="form_mindfulness" class="form hidden">
+                How did you stay present? <br>
+                <input type="text" id="mindfulness_input">
+                <button data-mycolor="rgb(144, 162, 173)" id="mindfulness_add">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- filter and the actual task that were added to the list -->
+    <div id="right">
+        <!-- &check; -->
+        <div id="select">
+            Filter: 
+            <select id="filter">
+                <option value="all">All</option>
+                <option value="food">Food</option>
+                <option value="exer">Exercise</option>
+                <option value="mind">Mindfulness</option>
+            </select>
+            <button id="delete">Delete Entries</button>
+        </div>
+    </div>
+
+    <script>
+        //get all buttons work
+        let allButtons = document.querySelectorAll('.form button')
+        let right = document.querySelector('#right')
+        let deleteAll = document.getElementById('delete')
+        for (let i = 0; i < allButtons.length; i++) {
+            allButtons[i].onclick = function(event) {
+                //get input text
+                let text = event.currentTarget.previousElementSibling.value
+
+                //if input is not empty
+                if (text) {
+                    let temp = document.createElement('div')
+                    temp.innerHTML = text
+
+                    //setting up temp style
+                    temp.style.backgroundColor = event.currentTarget.dataset.mycolor
+                    temp.classList.add('log')
+                    temp.setAttribute('data-logtype', event.currentTarget.id)
+
+                    //delete button
+                    let delButton = document.createElement('button')
+                    delButton.innerHTML = 'X'
+                    delButton.style.float = 'right'
+                    delButton.classList.add('func')
+
+                    //checkmark button
+                    let checkButton = document.createElement('button')
+                    checkButton.innerHTML = '&check;'
+                    checkButton.style.float = 'right'
+                    checkButton.classList.add('func')
+                    
+                    //arrow up &#8682;
+                    
+                    //append buttons
+                    temp.appendChild(delButton)
+                    temp.appendChild(checkButton)
+
+                    //activate delete button
+                    delButton.onclick = function(event) {
+                        right.removeChild(temp)
+                    }
+
+                    //activate check button
+                    let x = 0
+                    let complete = document.createElement('div')
+                    complete.innerHTML = "&check;"
+                    complete.classList.add('checkmark')
+                    checkButton.onclick = function(event) {
+                        if (x==0) {
+                            temp.appendChild(complete)
+                            x = 1
+                        } else {
+                            temp.removeChild(complete)
+                            x = 0
+                        }
+                    }
+
+                    right.appendChild(temp)
+                }
+            }
+        }
+
+        // enter key event
+        var input = document.querySelectorAll("input");
+        for (let i = 0; i < input.length; i++) {
+            input[i].addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) {
+                    document.querySelectorAll('button')[i].click();
+                }
+            });
+        }
+
+        //Delete Entries button
+        deleteAll.onclick = function(event) {
+            let logs = right.children
+            let todelete=[];
+            for (let i = 1; i < logs.length; i++) {
+                if (!logs[i].classList.contains('hidden')) {
+                    todelete.push(logs[i])
+                }
+            }
+            for (let j = 0; j < todelete.length; j++) {
+                right.removeChild(todelete[j])
+            }
+        }
+
+        //get filter work
+        let filter = document.getElementById('filter')
+        filter.onclick = function(event) {
+            //console.log(filter.value)
+            let logs = right.children
+            //console.log(logs)
+            if (filter.value == 'all') {
+                for (let i = 1; i < logs.length; i++) {
+                    logs[i].classList.remove('hidden')
+                }
+            }
+            if (filter.value == 'food') {
+                for (let i = 1; i < logs.length; i++) {
+                    if (logs[i].dataset.logtype != "food_add") {
+                        logs[i].classList.add('hidden')
+                    }
+                    else
+                        logs[i].classList.remove('hidden')
+                }
+            }
+            if (filter.value == 'exer') {
+                for (let i = 1; i < logs.length; i++) {
+                    if (logs[i].dataset.logtype != "exercise_add") {
+                        logs[i].classList.add('hidden')
+                    }
+                    else
+                        logs[i].classList.remove('hidden')
+                }
+            }
+            if (filter.value == 'mind') {
+                for (let i = 1; i < logs.length; i++) {
+                    if (logs[i].dataset.logtype != "mindfulness_add") {
+                        logs[i].classList.add('hidden')
+                    }
+                    else
+                        logs[i].classList.remove('hidden')
+                }
+            }
+        }
+
+        //have the tabs listen to mouse events
+        let allTabs = document.querySelectorAll('.tab');
+        for (let i = 0; i < allTabs.length; i++) {
+            allTabs[i].onclick = function(event) {
+                //remove the active class from other tabs
+                document.querySelector('.active').classList.remove('active')
+
+                //add the active class to this tab
+                event.currentTarget.classList.add('active')
+
+                //hide all of the existing forms
+                let allForms = document.querySelectorAll('.form')
+                for (let j = 0; j < allForms.length; j++) {
+                    allForms[j].classList.add('hidden')
+                }
+
+                //show associated form
+                let myform = event.currentTarget.dataset.myform
+                document.querySelector(myform).classList.remove('hidden')
+            }
+        }
+    </script>
+<body>
+
+
+</body>
+
+</html>
