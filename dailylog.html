@@ -22,20 +22,20 @@
     <!-- tabs and forms for users to fill out -->
     <div id="left">
         <div id="tabs">
-            <div data-myform="#form_exercise" id="tab_exercise" class="tab active">Mission</div>
-            <div data-myform="#form_food" id="tab_food" class="tab">Food</div>
-            <div data-myform="#form_mindfulness" id="tab_mindfulness" class="tab">Random</div>
+            <div data-myform="#form_exercise" id="tab_exercise" class="tab active floating middle">Mission</div>
+            <div data-myform="#form_food" id="tab_food" class="tab middle">Food</div>
+            <div data-myform="#form_mindfulness" id="tab_mindfulness" class="tab middle">Random</div>
         </div>
         <div id="forms">
             <div id="form_exercise" class="form">
                 <p>What's your plan for today? <br></p>
                 <input type="text" id="exercise_input" placeholder="lunch with abbie">
-                <button data-mycolor="#487695" id="exercise_add">Add</button>
+                <button data-mycolor="#5a839f" id="exercise_add">Add</button>
             </div>
             <div id="form_food" class="form hidden">
                 <p>What do you want to eat? <br></p>
                 <input type="text" id="food_input" placeholder="ramen">
-                <button data-mycolor="#6c91aa" id="food_add">Add</button>
+                <button data-mycolor="#91acbf" id="food_add">Add</button>
             </div>
             <div id="form_mindfulness" class="form hidden">
                 <p>Anything else...? <br></p>
@@ -57,6 +57,7 @@
                 <option value="mind">Random</option>
             </select>
             <button id="delete">Delete Entries</button>
+            <div id='mylog'></div>
         </div>
     </div>
 
@@ -64,6 +65,7 @@
         //get add buttons to work
         let allButtons = document.querySelectorAll('.form button')
         let right = document.querySelector('#right')
+        let mylog = document.querySelector('#mylog')
         let deleteAll = document.getElementById('delete')
         for (let i = 0; i < allButtons.length; i++) {
             allButtons[i].onclick = function(event) {
@@ -80,6 +82,14 @@
                     temp.classList.add('log')
                     temp.classList.add('floating')
                     temp.setAttribute('data-logtype', event.currentTarget.id)
+
+                    //mouseover event
+                    temp.onmouseover = function(e) {
+                        temp.classList.remove('floating')
+                    }
+                    temp.onmouseout = function(e) {
+                        temp.classList.add('floating')
+                    }
 
                     //delete button
                     let delButton = document.createElement('button')
@@ -101,7 +111,7 @@
 
                     //activate delete button
                     delButton.onclick = function(event) {
-                        right.removeChild(temp)
+                        mylog.removeChild(temp)
                     }
 
                     //activate check button
@@ -119,9 +129,23 @@
                         }
                     }
 
-                    right.appendChild(temp)
+                    mylog.appendChild(temp)
                     document.querySelectorAll('input')[i].value = ''
                 }
+            }
+        }
+
+        let logs = right.children;
+        function stopFloating() {
+            for (let i = 0; i < logs.length; i++) {
+                logs[i].classList.remove('floating')
+
+            }
+        }
+        function startFloating() {
+            for (let i = 0; i < logs.length; i++) {
+                logs[i].classList.add('floating')
+
             }
         }
 
@@ -137,29 +161,29 @@
 
         //Delete Entries button
         deleteAll.onclick = function(event) {
-            let logs = right.children
+            let logs = mylog.children
             let todelete=[];
-            for (let i = 1; i < logs.length; i++) {
+            for (let i = 0; i < logs.length; i++) {
                 if (!logs[i].classList.contains('hidden')) {
                     todelete.push(logs[i])
                 }
             }
             for (let j = 0; j < todelete.length; j++) {
-                right.removeChild(todelete[j])
+                mylog.removeChild(todelete[j])
             }
         }
 
         //get filter work
         let filter = document.getElementById('filter')
         function logfilter() {
-            let logs = right.children
+            let logs = mylog.children
             if (filter.value == 'all') {
-                for (let i = 1; i < logs.length; i++) {
+                for (let i = 0; i < logs.length; i++) {
                     logs[i].classList.remove('hidden')
                 }
             }
             if (filter.value == 'food') {
-                for (let i = 1; i < logs.length; i++) {
+                for (let i = 0; i < logs.length; i++) {
                     if (logs[i].dataset.logtype != "food_add") {
                         logs[i].classList.add('hidden')
                     }
@@ -168,7 +192,7 @@
                 }
             }
             if (filter.value == 'exer') {
-                for (let i = 1; i < logs.length; i++) {
+                for (let i = 0; i < logs.length; i++) {
                     if (logs[i].dataset.logtype != "exercise_add") {
                         logs[i].classList.add('hidden')
                     }
@@ -177,7 +201,7 @@
                 }
             }
             if (filter.value == 'mind') {
-                for (let i = 1; i < logs.length; i++) {
+                for (let i = 0; i < logs.length; i++) {
                     if (logs[i].dataset.logtype != "mindfulness_add") {
                         logs[i].classList.add('hidden')
                     }
@@ -193,9 +217,11 @@
             allTabs[i].onclick = function(event) {
                 //remove the active class from other tabs
                 document.querySelector('.active').classList.remove('active')
+                document.querySelector('.floating').classList.remove('floating')
 
                 //add the active class to this tab
                 event.currentTarget.classList.add('active')
+                event.currentTarget.classList.add('floating')
 
                 //hide all of the existing forms
                 let allForms = document.querySelectorAll('.form')
